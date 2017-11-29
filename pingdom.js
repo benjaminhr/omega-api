@@ -1,21 +1,30 @@
+// /* LOCAL CREDENTIALS */ 
+// const credentials = {
+//   user: 'hostmaster@appgyver.com',
+//   pass: 'lolcatisappgyvercat',
+//   appkey: 'u0xcts0z84rfrc4lw95ip7to3x754a81'
+// }
+//
+// const baseUrl = 'http://localhost:8080/'
+
 const credentials = {
-  user: 'hostmaster@appgyver.com',
-  pass: 'lolcatisappgyvercat',
-  appkey: 'u0xcts0z84rfrc4lw95ip7to3x754a81'
+  user: process.env.P_USER,
+  pass: process.env.P_PASS,
+  appkey: process.env.P_APP_KEY
 }
 
+const baseUrl = process.env.BASE_URL
 const flowdock = require('./flowdock')
 const fetch = require('node-fetch')
 const p = require('pingdom-api')
 const pingdom = p(credentials)
-const baseUrl = 'http://localhost:8080/'
+
 
 let statuses = []
 let hasMessageBeenSentBefore = {}
 
 function checkStatuses() {
   if (statuses.includes('down')) {
-    console.log(statuses)
     statuses = []
 
     fetch(baseUrl + 'down', {
@@ -23,7 +32,6 @@ function checkStatuses() {
     })
 
   } else {
-    console.log(statuses)
     fetch(baseUrl + 'up', {
       method: 'POST'
     })
