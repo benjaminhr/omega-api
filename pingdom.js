@@ -4,7 +4,7 @@
 //   pass: 'lolcatisappgyvercat',
 //   appkey: 'u0xcts0z84rfrc4lw95ip7to3x754a81'
 // }
-//
+
 // const baseUrl = 'http://localhost:8080/'
 
 const credentials = {
@@ -54,10 +54,11 @@ function ping() {
 
       if (status == 'down' && !name.includes('usetrace')) {
 
+        statuses.push(check.status)
+
         if (!hasMessageBeenSentBefore.hasOwnProperty(name)) {
           hasMessageBeenSentBefore[name] = currentTime
           flowdock.send(name, lasterrortime)
-          statuses.push(check.status)
         }
 
       }
