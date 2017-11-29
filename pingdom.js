@@ -56,16 +56,14 @@ function ping() {
           hasMessageBeenSentBefore[name] = currentTime
           flowdock.send(name, lasterrortime)
           statuses.push(check.status)
-        } else {
-          statuses.push(check.status)
-
-          // Here the time between each notification can be changed
-          if (currentTime - hasMessageBeenSentBefore[name] > 300) {
-            console.log('DELETED')
-            delete hasMessageBeenSentBefore[name]
-          }
-
         }
+
+      }
+      
+      // Here the time between each notification can be changed
+      if (currentTime - hasMessageBeenSentBefore[name] > 300) {
+        console.log('DELETED')
+        delete hasMessageBeenSentBefore[name]
       }
       
     })
