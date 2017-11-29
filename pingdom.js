@@ -54,7 +54,7 @@ function ping() {
 
       if (status == 'down' && !name.includes('usetrace')) {
 
-        statuses.push(check.status)
+        statuses.push(status)
 
         if (!hasMessageBeenSentBefore.hasOwnProperty(name)) {
           hasMessageBeenSentBefore[name] = currentTime
