@@ -24,7 +24,9 @@ let statuses = []
 let hasMessageBeenSentBefore = {}
 
 function checkStatuses() {
-  if (statuses.includes('down')) {
+  console.log(statuses)
+
+  if (statuses.length > 0) {
     statuses = []
 
     fetch(baseUrl + 'down', {
@@ -65,7 +67,7 @@ function ping() {
         console.log('DELETED')
         delete hasMessageBeenSentBefore[name]
       }
-      
+
     })
   })
 }
