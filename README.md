@@ -8,4 +8,4 @@ For the office light
  - Up and Running: 
     - `npm install`
     - `node api.js`
-    - `node pindom.js`
+    - `node pingdom.js`
