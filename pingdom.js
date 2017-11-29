@@ -4,24 +4,43 @@ const credentials = {
   appkey: 'u0xcts0z84rfrc4lw95ip7to3x754a81'
 }
 
+const flowdock = require('./flowdock')
 const fetch = require('node-fetch')
-const pingdom = require('pingdom-api')
-const p = pingdom(credentials)
+const p = require('pingdom-api')
+const pingdom = p(credentials)
 const baseUrl = 'http://localhost:8080/'
 
+let statuses = []
+
+function checkStatuses() {
+  if (statuses.includes('down')) {
+    console.log(statuses)
+    statuses = []
+
+    fetch(baseUrl + 'down', {
+      method: 'POST'
+    })
+
+  } else {
+    console.log(statuses)
+    fetch(baseUrl + 'up', {
+      method: 'POST'
+    })
+    statuses = []
+  }
+}
+
 function ping() {
-  p.checks((err, checks) => {
+  pingdom.checks((err, checks) => {
     if (err) throw err
 
     checks.forEach((check) => {
       if (check.status == 'down' && !check.name.includes('usetrace')) {
-        fetch(baseUrl + 'down', {
-          method: 'POST'
-        })  
-      } else {
-        fetch(baseUrl + 'up', {
-          method: 'POST'
-        })  
+        var name = check.name
+        var lasterrortime = check.lasterrortime
+        
+        flowdock.send(name,lasterrortime)
+        statuses.push(check.status)        
       }
     })
 
@@ -29,40 +48,7 @@ function ping() {
 }
 
 // because js doesn't have sleep()
-setInterval(() => ping(), 5000)
-
-function flowdock(name) {
-  var timestamp = new Date.now().toUTCString()
-  var flowdock_token = "5ebe97cf9ae259befb54bceb627e05f9"
-
-  var data = {
-    "flow_token": `${flowdock_token}`,
-    "event": "activity",
-    "author": {
-      "name": `${name}`,
-      "avatar": "https://lh3.googleusercontent.com/BJnNSzRfzXS_hSYposOL5trRgupgQo4aP01JcoHLuBmqKY1aOgfiLpdWzDf6TzRphg=w300"
-    },
-    "title": "is down",
-    "external_thread_id": `${timestamp}`,
-    "thread": {
-      "title": `${name}`,
-      "body": "Fix it pls",
-      "external_url": "https://my.pingdom.com/newchecks/checks",
-      "status": {
-        "color": "red",
-        "value": "down"
-      }
-    }
-  }
-
-  fetch('https://api.flowdock.com/messages', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  .then(data => data.json())
-  .then(json => console.log(json))
-}
+setInterval(() => {
+  ping()
+  checkStatuses()
+}, 4000)
