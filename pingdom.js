@@ -11,6 +11,7 @@ const pingdom = p(credentials)
 const baseUrl = 'http://localhost:8080/'
 
 let statuses = []
+let hasMessageBeenSentBefore = {}
 
 function checkStatuses() {
   if (statuses.includes('down')) {
@@ -33,17 +34,33 @@ function checkStatuses() {
 function ping() {
   pingdom.checks((err, checks) => {
     if (err) throw err
+    console.log(hasMessageBeenSentBefore)
 
     checks.forEach((check) => {
-      if (check.status == 'down' && !check.name.includes('usetrace')) {
-        var name = check.name
-        var lasterrortime = check.lasterrortime
-        
-        flowdock.send(name,lasterrortime)
-        statuses.push(check.status)        
-      }
-    })
+      var name = check.name
+      var status = check.status
+      var lasterrortime = check.lasterrortime
+      var currentTime = Math.round(new Date() / 1000)
 
+      if (status == 'down' && !name.includes('usetrace')) {
+
+        if (!hasMessageBeenSentBefore.hasOwnProperty(name)) {
+          hasMessageBeenSentBefore[name] = currentTime
+          flowdock.send(name, lasterrortime)
+          statuses.push(check.status)
+        } else {
+          statuses.push(check.status)
+
+          // Here the time between each notification can be changed
+          if (currentTime - hasMessageBeenSentBefore[name] > 300) {
+            console.log('DELETED')
+            delete hasMessageBeenSentBefore[name]
+          }
+
+        }
+      }
+      
+    })
   })
 }
 
