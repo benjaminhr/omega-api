@@ -35,8 +35,7 @@ var send = function(name, lasterrortime) {
     },
     body: JSON.stringify(data)
   })
-    .then(data => data.json())
-    .then(json => console.log(json))
+  .then(console.log('NOTIFICATION SENT'))
 }
 
 
