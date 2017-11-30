@@ -10,11 +10,10 @@ const fetch = require('node-fetch')
 const p = require('pingdom-api')
 const pingdom = p(credentials)
 
-
 let statuses = []
 let hasMessageBeenSentBefore = {}
 
-function checkStatuses() {
+function checkStatuses () {
   console.log(statuses)
 
   if (statuses.length > 0) {
@@ -23,7 +22,6 @@ function checkStatuses() {
     fetch(baseUrl + 'down', {
       method: 'POST'
     })
-
   } else {
     fetch(baseUrl + 'up', {
       method: 'POST'
@@ -32,7 +30,7 @@ function checkStatuses() {
   }
 }
 
-function ping() {
+function ping () {
   pingdom.checks((err, checks) => {
     if (err) throw err
     console.log(hasMessageBeenSentBefore)
@@ -42,7 +40,7 @@ function ping() {
       var status = check.status
       var currentTime = Math.round(new Date() / 1000)
 
-      if (status == 'down' && !name.includes('usetrace')) {
+      if (status === 'down' && !name.includes('usetrace')) {
         statuses.push(status)
 
         if (!hasMessageBeenSentBefore.hasOwnProperty(name)) {
@@ -50,7 +48,7 @@ function ping() {
           flowdock.send(name)
         }
       }
-  
+
       // Here the time between each notification can be changed
       if (currentTime - hasMessageBeenSentBefore[name] > 300) {
         console.log('DELETED')

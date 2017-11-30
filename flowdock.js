@@ -1,25 +1,25 @@
 const fetch = require('node-fetch')
 
-var send = function(name) {
-  var flowdock_token = process.env.FLOWDOCK_TOKEN || "5ebe97cf9ae259befb54bceb627e05f9"
+var send = function (name) {
+  var flowdockToken = process.env.FLOWDOCK_TOKEN || '5ebe97cf9ae259befb54bceb627e05f9'
   var randomThreadId = Math.floor(Math.random() * 10000) + 1
 
   var data = {
-    "flow_token": `${flowdock_token}`,
-    "event": "activity",
-    "author": {
-      "name": `${name}`,
-      "avatar": "https://lh3.googleusercontent.com/BJnNSzRfzXS_hSYposOL5trRgupgQo4aP01JcoHLuBmqKY1aOgfiLpdWzDf6TzRphg=w300"
+    'flow_token': `${flowdockToken}`,
+    'event': 'activity',
+    'author': {
+      'name': `${name}`,
+      'avatar': 'https://lh3.googleusercontent.com/BJnNSzRfzXS_hSYposOL5trRgupgQo4aP01JcoHLuBmqKY1aOgfiLpdWzDf6TzRphg=w300'
     },
-    "title": "is down",
-    "external_thread_id": `${randomThreadId}`,
-    "thread": {
-      "title": `${name}`,
-      "body": "Fix it pls",
-      "external_url": "https://my.pingdom.com/newchecks/checks",
-      "status": {
-        "color": "red",
-        "value": "down"
+    'title': 'is down',
+    'external_thread_id': `${randomThreadId}`,
+    'thread': {
+      'title': `${name}`,
+      'body': 'Fix it pls',
+      'external_url': 'https://my.pingdom.com/newchecks/checks',
+      'status': {
+        'color': 'red',
+        'value': 'down'
       }
     }
   }
@@ -35,5 +35,4 @@ var send = function(name) {
   .then(console.log('NOTIFICATION SENT'))
 }
 
-
-exports.send = send;
+exports.send = send
