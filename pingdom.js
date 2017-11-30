@@ -1,19 +1,10 @@
-// /* LOCAL CREDENTIALS */ 
-// const credentials = {
-//   user: 'hostmaster@appgyver.com',
-//   pass: 'lolcatisappgyvercat',
-//   appkey: 'u0xcts0z84rfrc4lw95ip7to3x754a81'
-// }
-
-// const baseUrl = 'http://localhost:8080/'
-
 const credentials = {
-  user: process.env.P_USER,
-  pass: process.env.P_PASS,
-  appkey: process.env.P_APP_KEY
+  user: process.env.P_USER || 'hostmaster@appgyver.com',
+  pass: process.env.P_PASS || 'lolcatisappgyvercat',
+  appkey: process.env.P_APP_KEY || 'u0xcts0z84rfrc4lw95ip7to3x754a81'
 }
 
-const baseUrl = process.env.BASE_URL
+const baseUrl = process.env.BASE_URL || 'http://localhost:8080/'
 const flowdock = require('./flowdock')
 const fetch = require('node-fetch')
 const p = require('pingdom-api')
