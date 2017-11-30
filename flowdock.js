@@ -1,6 +1,6 @@
 const fetch = require('node-fetch')
 
-var send = function(name, lasterrortime) {
+var send = function(name) {
   var date = new Date()
   var timestamp = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
   var flowdock_token = process.env.FLOWDOCK_TOKEN || "5ebe97cf9ae259befb54bceb627e05f9"

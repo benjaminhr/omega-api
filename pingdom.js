@@ -40,7 +40,6 @@ function ping() {
     checks.forEach((check) => {
       var name = check.name
       var status = check.status
-      var lasterrortime = check.lasterrortime
       var currentTime = Math.round(new Date() / 1000)
 
       if (status == 'down' && !name.includes('usetrace')) {
@@ -49,7 +48,7 @@ function ping() {
 
         if (!hasMessageBeenSentBefore.hasOwnProperty(name)) {
           hasMessageBeenSentBefore[name] = currentTime
-          flowdock.send(name, lasterrortime)
+          flowdock.send(name)
         }
 
       }
