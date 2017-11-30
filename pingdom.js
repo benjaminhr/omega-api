@@ -43,22 +43,19 @@ function ping() {
       var currentTime = Math.round(new Date() / 1000)
 
       if (status == 'down' && !name.includes('usetrace')) {
-
         statuses.push(status)
 
         if (!hasMessageBeenSentBefore.hasOwnProperty(name)) {
           hasMessageBeenSentBefore[name] = currentTime
           flowdock.send(name)
         }
-
       }
-      
+  
       // Here the time between each notification can be changed
       if (currentTime - hasMessageBeenSentBefore[name] > 300) {
         console.log('DELETED')
         delete hasMessageBeenSentBefore[name]
       }
-
     })
   })
 }
