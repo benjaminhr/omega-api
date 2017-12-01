@@ -45,7 +45,8 @@ function ping () {
 
         if (!hasMessageBeenSentBefore.hasOwnProperty(name)) {
           hasMessageBeenSentBefore[name] = currentTime
-          flowdock.send(name)
+          flowdock.notification(name)
+          flowdock.message(name)
         }
       }
 
