@@ -51,7 +51,7 @@ function ping () {
       }
 
       // Here the time between each notification can be changed
-      if (currentTime - hasMessageBeenSentBefore[name] > 300) {
+      if (currentTime - hasMessageBeenSentBefore[name] > 600) {
         console.log('DELETED')
         delete hasMessageBeenSentBefore[name]
       }
