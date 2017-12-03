@@ -1,7 +1,7 @@
 const credentials = {
   user: process.env.P_USER || 'hostmaster@appgyver.com',
   pass: process.env.P_PASS || 'lolcatisappgyvercat',
-  appkey: process.env.P_APP_KEY || 'u0xcts0z84rfrc4lw95ip7to3x754a81'
+  appkey: process.env.P_APP_KEY || 'k0gppsbnl749ln89wy0m7a7a86hkztk6'
 }
 
 const baseUrl = process.env.BASE_URL || 'http://localhost:8080/'
