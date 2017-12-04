@@ -30,6 +30,26 @@ function checkStatuses () {
   }
 }
 
+function handleNotifications(name, status, currentTime) {
+  // send notification once, if item is back up 
+  if (status === 'up' && hasMessageBeenSentBefore.hasOwnProperty(name)) {
+
+    if (hasMessageBeenSentBefore[name].statusBackUp != true) {
+      flowdock.message(name, 'is back up')
+    }
+
+    hasMessageBeenSentBefore[name].statusBackUp = true
+  }
+
+  // Here the time (seconds) between each notification can be changed
+  if (hasMessageBeenSentBefore[name]) {
+    if (currentTime - hasMessageBeenSentBefore[name].notificationTimestamp > 600) {
+      console.log('DELETED')
+      delete hasMessageBeenSentBefore[name]
+    }
+  }
+}
+
 function ping () {
   pingdom.checks((err, checks) => {
     if (err) throw err
@@ -56,23 +76,7 @@ function ping () {
         }
       }
 
-      // send notification once, if item is back up 
-      if (status === 'up' && hasMessageBeenSentBefore.hasOwnProperty(name)) {
-
-        if (hasMessageBeenSentBefore[name].statusBackUp != true) {
-          flowdock.message(name, 'is back up')
-        }
-
-        hasMessageBeenSentBefore[name].statusBackUp = true
-      }
-
-      // Here the time (seconds) between each notification can be changed
-      if (hasMessageBeenSentBefore[name]) {
-        if (currentTime - hasMessageBeenSentBefore[name].notificationTimestamp > 600) {
-          console.log('DELETED')
-          delete hasMessageBeenSentBefore[name]
-        }
-      }
+      handleNotifications(name, status, currentTime)
 
     })
   })
@@ -87,6 +91,7 @@ var healthcheck = function() {
   .then(data => data.json())
   .then((data) => {
     let checks = data.checks
+    let currentTime = Math.round(new Date() / 1000)
 
     checks.forEach((check) => {
       let status = check.status
@@ -105,23 +110,7 @@ var healthcheck = function() {
         }
       }
       
-      // send notification once, if item is back up 
-      if (status === 'up' && hasMessageBeenSentBefore.hasOwnProperty(name)) {
-
-        if (hasMessageBeenSentBefore[name].statusBackUp != true) {
-          flowdock.message(name, 'is back up')
-        }
-
-        hasMessageBeenSentBefore[name].statusBackUp = true
-      }
-
-      // Here the time (seconds) between each notification can be changed
-      if (hasMessageBeenSentBefore[name]) {
-        if (currentTime - hasMessageBeenSentBefore[name].notificationTimestamp > 600) {
-          console.log('DELETED')
-          delete hasMessageBeenSentBefore[name]
-        }
-      }
+      handleNotifications(name, status, currentTime)
 
     })
   })
