@@ -36,10 +36,10 @@ function ping () {
     console.log(hasMessageBeenSentBefore)
 
     checks.forEach((check) => {
-      var name = check.name
-      var hostname = check.hostname
-      var status = check.status
-      var currentTime = Math.round(new Date() / 1000)
+      let name = check.name
+      let hostname = check.hostname
+      let status = check.status
+      let currentTime = Math.round(new Date() / 1000)
 
       if (status === 'down' && !name.includes('usetrace') && hostname.includes('appgyver')) {
         statuses.push(status)
@@ -78,8 +78,58 @@ function ping () {
   })
 }
 
+var healthcheck = function() {
+  fetch('https://healthchecks.io/api/v1/checks/\?tag\=push-notifications', {
+    headers: {
+      'X-Api-Key': 'WiUV-CaAto5_wUmhLU7ZmV_RlK2I7K_d'
+    }
+  })
+  .then(data => data.json())
+  .then((data) => {
+    let checks = data.checks
+
+    checks.forEach((check) => {
+      let status = check.status
+      let name = check.name
+
+      if (status === 'down') {
+        if (!hasMessageBeenSentBefore.hasOwnProperty(name)) {
+          let propertyData = {
+            'notificationTimestamp': currentTime,
+            'statusBackUp': false
+          }
+          hasMessageBeenSentBefore[name] = propertyData
+
+          flowdock.notification(name)
+          flowdock.message(name, 'is down')
+        }
+      }
+      
+      // send notification once, if item is back up 
+      if (status === 'up' && hasMessageBeenSentBefore.hasOwnProperty(name)) {
+
+        if (hasMessageBeenSentBefore[name].statusBackUp != true) {
+          flowdock.message(name, 'is back up')
+        }
+
+        hasMessageBeenSentBefore[name].statusBackUp = true
+      }
+
+      // Here the time (seconds) between each notification can be changed
+      if (hasMessageBeenSentBefore[name]) {
+        if (currentTime - hasMessageBeenSentBefore[name].notificationTimestamp > 600) {
+          console.log('DELETED')
+          delete hasMessageBeenSentBefore[name]
+        }
+      }
+
+    })
+  })
+}
+
 // because js doesn't have sleep()
 setInterval(() => {
   ping()
+  healthcheck()
   checkStatuses()
 }, 4000)
