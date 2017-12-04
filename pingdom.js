@@ -40,7 +40,7 @@ function ping () {
       var status = check.status
       var currentTime = Math.round(new Date() / 1000)
 
-      if (status === 'down' && !name.includes('usetrace')) {
+      if (status === 'down' && !name.includes('usetrace') && name.includes('appgyver')) {
         statuses.push(status)
 
         if (!hasMessageBeenSentBefore.hasOwnProperty(name)) {
@@ -50,7 +50,7 @@ function ping () {
         }
       }
 
-      // Here the time between each notification can be changed
+      // Here the time (seconds) between each notification can be changed
       if (currentTime - hasMessageBeenSentBefore[name] > 600) {
         console.log('DELETED')
         delete hasMessageBeenSentBefore[name]
