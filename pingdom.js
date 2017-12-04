@@ -37,24 +37,43 @@ function ping () {
 
     checks.forEach((check) => {
       var name = check.name
+      var hostname = check.hostname
       var status = check.status
       var currentTime = Math.round(new Date() / 1000)
 
-      if (status === 'down' && !name.includes('usetrace') && name.includes('appgyver')) {
+      if (status === 'down' && !name.includes('usetrace') && hostname.includes('appgyver')) {
         statuses.push(status)
 
         if (!hasMessageBeenSentBefore.hasOwnProperty(name)) {
-          hasMessageBeenSentBefore[name] = currentTime
+          let propertyData = {
+            'notificationTimestamp': currentTime,
+            'statusBackUp': false
+          }
+          hasMessageBeenSentBefore[name] = propertyData
+
           flowdock.notification(name)
-          flowdock.message(name)
+          flowdock.message(name, 'is down')
         }
       }
 
-      // Here the time (seconds) between each notification can be changed
-      if (currentTime - hasMessageBeenSentBefore[name] > 600) {
-        console.log('DELETED')
-        delete hasMessageBeenSentBefore[name]
+      // send notification once, if item is back up 
+      if (status === 'up' && hasMessageBeenSentBefore.hasOwnProperty(name)) {
+
+        if (hasMessageBeenSentBefore[name].statusBackUp != true) {
+          flowdock.message(name, 'is back up')
+        }
+
+        hasMessageBeenSentBefore[name].statusBackUp = true
       }
+
+      // Here the time (seconds) between each notification can be changed
+      if (hasMessageBeenSentBefore[name]) {
+        if (currentTime - hasMessageBeenSentBefore[name].notificationTimestamp > 600) {
+          console.log('DELETED')
+          delete hasMessageBeenSentBefore[name]
+        }
+      }
+
     })
   })
 }

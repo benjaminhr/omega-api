@@ -35,14 +35,17 @@ var notification = function (name) {
   .then(console.log('NOTIFICATION SENT'))
 }
 
-var message = function (name) {
+var message = function (name, status) {
   var flowdockToken = process.env.FLOWDOCK_TOKEN || '5ebe97cf9ae259befb54bceb627e05f9'
 
   var data = {
     'flow_token': `${flowdockToken}`,
     'event': 'message',
-    'content': `@team \`${name}\` is down!`,
+    'content': `@team \`${name}\` ${status}!`,
   }
+
+  // couldn't get threads to work
+  // if (timestamp) data['external_thread_id'] = timestamp
 
   fetch('https://api.flowdock.com/messages', {
     method: 'POST',
