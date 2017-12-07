@@ -1,7 +1,7 @@
 const fetch = require('node-fetch')
+const flowdockToken = process.env.FLOWDOCK_TOKEN || '5ebe97cf9ae259befb54bceb627e05f9'
 
 var notification = function (name) {
-  var flowdockToken = process.env.FLOWDOCK_TOKEN || '5ebe97cf9ae259befb54bceb627e05f9'
   var randomThreadId = Math.floor(Math.random() * 10000) + 1
 
   var data = {
@@ -36,8 +36,6 @@ var notification = function (name) {
 }
 
 var message = function (name, status) {
-  var flowdockToken = process.env.FLOWDOCK_TOKEN || '5ebe97cf9ae259befb54bceb627e05f9'
-
   var data = {
     'flow_token': `${flowdockToken}`,
     'event': 'message',
