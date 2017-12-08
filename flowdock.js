@@ -39,7 +39,7 @@ var message = function (name, status) {
   var data = {
     'flow_token': `${flowdockToken}`,
     'event': 'message',
-    'content': `@team \`${name}\` ${status}!`,
+    'content': `${status == 'is down' ? '🚨' : '🎉'} @team \`${name}\` ${status}! ${status == 'is down' ? '🚨' : '🎉'}`,
   }
 
   // couldn't get threads to work
