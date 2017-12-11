@@ -61,7 +61,13 @@ function ping () {
       let status = check.status
       let currentTime = Math.round(new Date() / 1000)
 
-      if (status === 'down' && !name.includes('usetrace') && hostname.includes('appgyver')) {
+      // apologies for whoever has to read this
+      // horrible if statement
+      if (status === 'down' &&
+          hostname.includes('appgyver') &&
+          !name.includes('usetrace') &&
+          !name.includes('forum')) 
+      {
         statuses.push(status)
 
         if (!hasMessageBeenSentBefore.hasOwnProperty(name)) {
