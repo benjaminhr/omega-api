@@ -36,10 +36,18 @@ var notification = function (name) {
 }
 
 var message = function (name, status) {
+  let atTeam;
+
+  if (name.includes('forum') || name.includes('push notification')) {
+    atTeam = false
+  } else {
+    atTeam = true
+  }
+
   var data = {
     'flow_token': `${flowdockToken}`,
     'event': 'message',
-    'content': `${status == 'is down' ? '🚨' : '🎉'} @team \`${name}\` ${status}! ${status == 'is down' ? '🚨' : '🎉'}`,
+    'content': `${status == 'is down' ? '🚨' : '🎉'} ${atTeam ? '@team' : ''} \`${name}\` ${status}! ${status == 'is down' ? '🚨' : '🎉'}`,
   }
 
   // couldn't get threads to work
