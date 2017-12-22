@@ -1,5 +1,7 @@
 const fetch = require('node-fetch')
-const flowdockToken = process.env.FLOWDOCK_TOKEN || '5ebe97cf9ae259befb54bceb627e05f9'
+const config = require('./config')
+
+const flowdockToken = config.flowdock_token
 
 var notification = function (name) {
   var randomThreadId = Math.floor(Math.random() * 10000) + 1

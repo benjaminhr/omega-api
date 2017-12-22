@@ -1,7 +1,9 @@
+const config = require('./config')
+
 const credentials = {
-  user: process.env.P_USER || 'hostmaster@appgyver.com',
-  pass: process.env.P_PASS || 'lolcatisappgyvercat',
-  appkey: process.env.P_APP_KEY || 'k0gppsbnl749ln89wy0m7a7a86hkztk6'
+  user: config.pingdom_user,
+  pass: config.pingdom_password,
+  appkey: config.pingdom_appkey
 }
 
 const baseUrl = process.env.BASE_URL || 'http://localhost:8080/'
